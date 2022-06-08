@@ -1,3 +1,5 @@
+
+
 class Herramientas_normalizadoras():
     """Esta clase esta pensada para contener listas y funciones que nos sirvan a la hora de normalizar archivos"""
     def __init__(self):
@@ -39,6 +41,21 @@ class Herramientas_normalizadoras():
                 'AR-CR09':'Corte de Raiz','AR-CR10':'Corte de Raiz','AR-PL03':'Plantacion',
                 'AR-RP01':'Retiro de Poda','AR-RP02':'Retiro de Poda','AR-RP03':'Retiro de Poda',
                 'AR-RV35':'Vereda','AR-RV36':'Vereda','AR-RV37':'Plantera'
+        }
+        
+        self.meses={
+            'Enero':{'inicio extremo':'01.01.2022','fin extremo':'30.01.2022','campo clasi':'01/2022'},
+            'Febrero':{'inicio extremo':'01.02.2022','fin extremo':'28.02.2022','campo clasi':'02/2022'},
+            'Marzo':{'inicio extremo':'01.03.2022','fin extremo':'31.01.2022','campo clasi':'03/2022'},
+            'Abril':{'inicio extremo':'01.04.2022','fin extremo':'30.01.2022','campo clasi':'04/2022'},
+            'Mayo':{'inicio extremo':'01.05.2022','fin extremo':'31.01.2022','campo clasi':'05/2022'},
+            'Junio':{'inicio extremo':'01.06.2022','fin extremo':'30.01.2022','campo clasi':'06/2022'},
+            'Julio':{'inicio extremo':'01.07.2022','fin extremo':'31.01.2022','campo clasi':'07/2022'},
+            'Agosto':{'inicio extremo':'01.08.2022','fin extremo':'31.01.2022','campo clasi':'08/2022'},
+            'Septiembre':{'inicio extremo':'01.09.2022','fin extremo':'30.01.2022','campo clasi':'09/2022'},
+            'Octubre':{'inicio extremo':'01.10.2022','fin extremo':'31.01.2022','campo clasi':'10/2022'},
+            'Noviembre':{'inicio extremo':'01.11.2022','fin extremo':'30.01.2022','campo clasi':'11/2022'},
+            'Diciembre':{'inicio extremo':'01.12.2022','fin extremo':'31.01.2022','campo clasi':'12/2022'}
         }
 
 
