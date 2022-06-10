@@ -4,14 +4,14 @@ import pandas as pd
 
 
 class Normalizar_archivos():
-    def __init__(self):
-        self.herramientas = Herramientas_normalizadoras()
-        pass
+    def __init__(self,credenciales):
+        self.herramientas = Herramientas_normalizadoras(credenciales)
+        self.credenciales = credenciales
 
     def normalizar_r11(self):
         """Normaliza el listado R11 y devuelve varios DF """
         #Trae del drive el archivo
-        df_relevamientos = Archivos_drive(r"C:\Users\20407295650\Desktop\credenciales.json","R11","Respuestas de formulario 1")#hacer variable el path
+        df_relevamientos = Archivos_drive(self.credenciales,"R11","Respuestas de formulario 1")#hacer variable el path
         relevamientos = df_relevamientos.abrir_archivo()
         #filtra el archivo a las columnas que precisamos y normaliza DAP y Altura
         filtrado = relevamientos[['Marca temporal', 'Nombre completo', 'Numero de aviso', 'Calle',

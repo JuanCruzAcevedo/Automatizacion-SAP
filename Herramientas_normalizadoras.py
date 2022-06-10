@@ -1,9 +1,13 @@
 
 
+from Cargas_Drive import Archivos_drive
+
 class Herramientas_normalizadoras():
     """Esta clase esta pensada para contener listas y funciones que nos sirvan a la hora de normalizar archivos"""
-    def __init__(self):
+    def __init__(self,credenciales):
         """Define listas como atributos para usar en determinados casos"""
+        self.credenciales = credenciales
+
         self.corte_raices = {
             'Corte de Raices Superficial con poda aérea':'AR-CR06',
        'Corte de Raices Profunda sin poda aérea':'AR-CR07',
@@ -42,7 +46,7 @@ class Herramientas_normalizadoras():
                 'AR-RP01':'Retiro de Poda','AR-RP02':'Retiro de Poda','AR-RP03':'Retiro de Poda',
                 'AR-RV35':'Vereda','AR-RV36':'Vereda','AR-RV37':'Plantera'
         }
-        
+
         self.meses={
             'Enero':{'inicio extremo':'01.01.2022','fin extremo':'30.01.2022','campo clasi':'01/2022'},
             'Febrero':{'inicio extremo':'01.02.2022','fin extremo':'28.02.2022','campo clasi':'02/2022'},
@@ -56,6 +60,12 @@ class Herramientas_normalizadoras():
             'Octubre':{'inicio extremo':'01.10.2022','fin extremo':'31.01.2022','campo clasi':'10/2022'},
             'Noviembre':{'inicio extremo':'01.11.2022','fin extremo':'30.01.2022','campo clasi':'11/2022'},
             'Diciembre':{'inicio extremo':'01.12.2022','fin extremo':'31.01.2022','campo clasi':'12/2022'}
+        }
+
+        self.inspectores ={
+            'Cuadrilla':'CUADC11','Bermejo, Mariana':'ARB-I060','Schetjman, Erica Maria':'CUAD-EMS',
+            'Smith, Guillermo':'ARB-I063','Varela, Noemí':'ARB-I051','Canalda, Agustín Edgardo E.':'ARB-I050',
+            'Macias, Santiago Tomás':'ARB-I061','Ariel Valdeverde':'ARB-I064','Gálvez, Juan Pablo':'ARB-I062'            
         }
 
 
@@ -112,3 +122,38 @@ class Herramientas_normalizadoras():
             return '14'
         else:
             return 'ERROR'
+
+    def redondear(self,chapa):
+        
+        if len(str(chapa)) <= 2:
+            return '1'
+
+        elif len(str(chapa)) == 3 :
+            return chapa[:1]+'01'
+
+        elif len(str(chapa)) == 4 :
+            return chapa[:2]+'01'
+
+        elif len(str(chapa)) >= 5 :
+            return chapa[:3]+'01'
+
+        def ubicacion_tecnica(self, ubt_ex = True):
+            '''Define 2 diccionarios de Ubicacion tecnica a partir de las bases de datos del drive'''
+            ubt_exacto= Archivos_drive(self.credenciales,'Codigos SAP','Ubicaciones Tecnicas') 
+            ubt_corredor=Archivos_drive(self.credenciales,'Codigos SAP','Ubicaciones Tecnicas Corredores')
+            
+            exacto = ubt_exacto.abrir_archivo()
+            corredor = ubt_corredor.abrir_archivo()
+            key_exacto = exacto['Calle y Altura'].tolist()
+            value_exacto = exacto['Ubicacion Tecnica'].tolist()
+
+            key_corredor = corredor['Calle y Altura'].tolist()
+            value_corredor = corredor['Ubicacion Tecnica'].tolist()
+
+            dic_exacto = dict(zip(key_exacto,value_exacto))
+            dic_corredor = dict(zip(key_corredor,value_corredor))
+            
+            if ubt_ex == True:
+                return dic_exacto
+            elif ubt_ex == False:
+                return dic_corredor
