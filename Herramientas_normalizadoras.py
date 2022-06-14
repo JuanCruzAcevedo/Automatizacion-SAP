@@ -50,16 +50,16 @@ class Herramientas_normalizadoras():
         self.meses={
             'Enero':{'inicio extremo':'01.01.2022','fin extremo':'30.01.2022','campo clasi':'01/2022'},
             'Febrero':{'inicio extremo':'01.02.2022','fin extremo':'28.02.2022','campo clasi':'02/2022'},
-            'Marzo':{'inicio extremo':'01.03.2022','fin extremo':'31.01.2022','campo clasi':'03/2022'},
-            'Abril':{'inicio extremo':'01.04.2022','fin extremo':'30.01.2022','campo clasi':'04/2022'},
-            'Mayo':{'inicio extremo':'01.05.2022','fin extremo':'31.01.2022','campo clasi':'05/2022'},
-            'Junio':{'inicio extremo':'01.06.2022','fin extremo':'30.01.2022','campo clasi':'06/2022'},
-            'Julio':{'inicio extremo':'01.07.2022','fin extremo':'31.01.2022','campo clasi':'07/2022'},
-            'Agosto':{'inicio extremo':'01.08.2022','fin extremo':'31.01.2022','campo clasi':'08/2022'},
-            'Septiembre':{'inicio extremo':'01.09.2022','fin extremo':'30.01.2022','campo clasi':'09/2022'},
-            'Octubre':{'inicio extremo':'01.10.2022','fin extremo':'31.01.2022','campo clasi':'10/2022'},
-            'Noviembre':{'inicio extremo':'01.11.2022','fin extremo':'30.01.2022','campo clasi':'11/2022'},
-            'Diciembre':{'inicio extremo':'01.12.2022','fin extremo':'31.01.2022','campo clasi':'12/2022'}
+            'Marzo':{'inicio extremo':'01.03.2022','fin extremo':'31.03.2022','campo clasi':'03/2022'},
+            'Abril':{'inicio extremo':'01.04.2022','fin extremo':'30.04.2022','campo clasi':'04/2022'},
+            'Mayo':{'inicio extremo':'01.05.2022','fin extremo':'31.05.2022','campo clasi':'05/2022'},
+            'Junio':{'inicio extremo':'01.06.2022','fin extremo':'30.06.2022','campo clasi':'06/2022'},
+            'Julio':{'inicio extremo':'01.07.2022','fin extremo':'31.07.2022','campo clasi':'07/2022'},
+            'Agosto':{'inicio extremo':'01.08.2022','fin extremo':'31.08.2022','campo clasi':'08/2022'},
+            'Septiembre':{'inicio extremo':'01.09.2022','fin extremo':'30.09.2022','campo clasi':'09/2022'},
+            'Octubre':{'inicio extremo':'01.10.2022','fin extremo':'31.10.2022','campo clasi':'10/2022'},
+            'Noviembre':{'inicio extremo':'01.11.2022','fin extremo':'30.11.2022','campo clasi':'11/2022'},
+            'Diciembre':{'inicio extremo':'01.12.2022','fin extremo':'31.12.2022','campo clasi':'12/2022'}
         }
 
         self.inspectores ={
@@ -67,6 +67,13 @@ class Herramientas_normalizadoras():
             'Smith, Guillermo':'ARB-I063','Varela, Noemí':'ARB-I051','Canalda, Agustín Edgardo E.':'ARB-I050',
             'Macias, Santiago Tomás':'ARB-I061','Ariel Valdeverde':'ARB-I064','Gálvez, Juan Pablo':'ARB-I062'            
         }
+        self.prestaciones_simp ={
+            'Corte de Raiz': 'RAICES','Poda': 'PODA','Vereda': 'VEREDA','Plantera': 'PLANTERA',
+            'Retiro de Poda': 'RETIRO','Poda Puntual': 'PPU','Retiro de Cepa': 'CEPA',
+            'Plantacion': 'PLANTACION','Extraccion': 'EXTRACCION'
+        }
+
+
 
 
     def podas(self,x):
@@ -137,23 +144,23 @@ class Herramientas_normalizadoras():
         elif len(str(chapa)) >= 5 :
             return chapa[:3]+'01'
 
-        def ubicacion_tecnica(self, ubt_ex = True):
-            '''Define 2 diccionarios de Ubicacion tecnica a partir de las bases de datos del drive'''
-            ubt_exacto= Archivos_drive(self.credenciales,'Codigos SAP','Ubicaciones Tecnicas') 
-            ubt_corredor=Archivos_drive(self.credenciales,'Codigos SAP','Ubicaciones Tecnicas Corredores')
-            
-            exacto = ubt_exacto.abrir_archivo()
-            corredor = ubt_corredor.abrir_archivo()
-            key_exacto = exacto['Calle y Altura'].tolist()
-            value_exacto = exacto['Ubicacion Tecnica'].tolist()
+    def ubicacion_tecnica(self, ubt_ex = True):
+        '''Define 2 diccionarios de Ubicacion tecnica a partir de las bases de datos del drive'''
+        ubt_exacto= Archivos_drive(self.credenciales,'Codigos SAP','Ubicaciones Tecnicas') 
+        ubt_corredor=Archivos_drive(self.credenciales,'Codigos SAP','Ubicaciones Tecnicas Corredores')
+        
+        exacto = ubt_exacto.abrir_archivo()
+        corredor = ubt_corredor.abrir_archivo()
+        key_exacto = exacto['Calle y Altura'].tolist()
+        value_exacto = exacto['Ubicacion Tecnica'].tolist()
 
-            key_corredor = corredor['Calle y Altura'].tolist()
-            value_corredor = corredor['Ubicacion Tecnica'].tolist()
+        key_corredor = corredor['Calle y Altura'].tolist()
+        value_corredor = corredor['Ubicacion Tecnica'].tolist()
 
-            dic_exacto = dict(zip(key_exacto,value_exacto))
-            dic_corredor = dict(zip(key_corredor,value_corredor))
-            
-            if ubt_ex == True:
-                return dic_exacto
-            elif ubt_ex == False:
-                return dic_corredor
+        dic_exacto = dict(zip(key_exacto,value_exacto))
+        dic_corredor = dict(zip(key_corredor,value_corredor))
+        
+        if ubt_ex == True:
+            return dic_exacto
+        elif ubt_ex == False:
+            return dic_corredor
