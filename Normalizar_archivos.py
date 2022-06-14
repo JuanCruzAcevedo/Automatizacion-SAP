@@ -1,7 +1,7 @@
 from  Herramientas_normalizadoras import Herramientas_normalizadoras
 from Cargas_Drive import Archivos_drive
 import pandas as pd
-
+import numpy as np
 
 class Normalizar_archivos():
     def __init__(self,credenciales):
@@ -81,7 +81,7 @@ class Normalizar_archivos():
         
         return [avisos_oficio_presidencia,avisos_duplicados,avisos_denegar,final]
     
-    def normalizar_mt1(self,df):
+    def normalizar_mt1(self,mes,df):
         """Se le pasa el mes en el que se pretende hacer la carga y el df correspondiente a MT1"""
         #resetea el index y lo toma como orden
         df.reset_index(inplace = True,drop = True)
@@ -110,7 +110,7 @@ class Normalizar_archivos():
         ubt_exactas = self.herramientas.ubicacion_tecnica()
         ubt_corredores = self.herramientas.ubicacion_tecnica(False)
 
-        df['Ubicación Tecnica'] = df['Altura exacta'].map(ubt_exactas).fillna(cargar['Corredor (automatico)'].map(ubt_corredores).fillna('No esta ubt'))
+        df['Ubicación Tecnica'] = df['Altura exacta'].map(ubt_exactas).fillna(df['Corredor (automatico)'].map(ubt_corredores).fillna('No esta ubt'))
 
         #Carga el puesto de trabajo 
 
