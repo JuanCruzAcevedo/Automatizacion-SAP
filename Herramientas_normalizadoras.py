@@ -81,7 +81,7 @@ class Herramientas_normalizadoras():
         'RAMAS Y TRONCOS: SOLICITUD DE RETIRO DE':'Retiro de Restos',
         'ARBOL: ENFERMEDADES':'Enfermedades'
         }
-        
+
         self.status_simplificado = {
             'INIC': 'Pentiente', 'PLAN': 'Pentiente', 'VERI': 'Pentiente',
             'CANC': 'Cerrado', 'IM01': 'Cerrado', 'IM02': 'Cerrado',
@@ -90,6 +90,11 @@ class Herramientas_normalizadoras():
             'OTRA': 'Cerrado','OPER': 'Operativo','PROG': 'Programado',
             'REOK': 'Resuelto'   
         }
+        self.barrios = {
+            '39':'Villa general Mitre','38':'Villa Devoto',
+            '46':'Villa Santa Rita','37':'Villa del Parque'
+        }
+        
 
 
 
