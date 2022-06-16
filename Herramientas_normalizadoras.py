@@ -72,6 +72,25 @@ class Herramientas_normalizadoras():
             'Retiro de Poda': 'RETIRO','Poda Puntual': 'PPU','Retiro de Cepa': 'CEPA',
             'Plantacion': 'PLANTACION','Extraccion': 'EXTRACCION'
         }
+        self.prestaciones_avisos = {
+        'ARBOL: CORTE DE RAICES QUE PRODUCEN ROTU':'Raices',
+        'ARBOL: PODA DE RAMAS INTEGRAL Y DESPEJES':'Poda',
+        'ARBOL: SOLICITUD DE EXTRACCION':'Extraccion',
+        'PROBLEMAS CON INTERVENCION DE ARBOLADO':'Problemas con intervencion',
+        'ARBOL: SOLICITUD DE PLANTACIONES':'Plantaciones',
+        'RAMAS Y TRONCOS: SOLICITUD DE RETIRO DE':'Retiro de Restos',
+        'ARBOL: ENFERMEDADES':'Enfermedades'
+        }
+        
+        self.status_simplificado = {
+            'INIC': 'Pentiente', 'PLAN': 'Pentiente', 'VERI': 'Pentiente',
+            'CANC': 'Cerrado', 'IM01': 'Cerrado', 'IM02': 'Cerrado',
+            'IM03': 'Cerrado','IM04': 'Cerrado','IM05': 'Cerrado',
+            'SERV': 'Cerrado','FREN': 'Cerrado','TERC': 'Cerrado',
+            'OTRA': 'Cerrado','OPER': 'Operativo','PROG': 'Programado',
+            'REOK': 'Resuelto'   
+        }
+
 
 
 
