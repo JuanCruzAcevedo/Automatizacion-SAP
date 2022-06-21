@@ -179,3 +179,31 @@ class Normalizar_archivos():
              )
         #hacer un print que diga cuantos hay sin ubt, cuantos sin prestacion y cuantos con el texto > a 40 
         return df
+
+    def normalizar_avisos(self,veintiocho,sesenta_y_seis):
+        '''Normaliza los avisos y devuelve varios DF'''
+        
+        #lee los archivos de los avisos y los junta (66 y 28)
+        df28= pd.read_excel(r'{}'.format(veintiocho))
+        df66= pd.read_excel(r'{}'.format(sesenta_y_seis))
+        df66 = df66[['Aviso','Txt. cód. med.']]
+        df28 = pd.merge(df28,df66,on='Aviso',how='left')
+
+        #Suma 3 columnas a partir de las herramientas normalizadoras
+        df28.rename(columns = {'Txt. cód. med.':'Prestacion'},inplace = True)
+        df28['Barrio'] = df28['Emplazamiento'].map(self.herramientas.barrios).fillna('Ver')
+        df28['Status simplificado'] = df28['Status usuario'].map(self.herramientas.status_simplificado)
+        df28['Prestacion Simplificada']= df28['Prestacion'].map(self.herramientas.prestaciones_avisos)
+
+        #crea un df de los n° de avisos relevados 
+        df_relevamientos = Archivos_drive(self.credenciales,"R11","Respuestas de formulario 1")#self.credenciales
+        relevamientos = df_relevamientos.abrir_archivo()
+        avisos_relevados = list(set(relevamientos['Numero de aviso']))
+
+        #divide en diferentes Df 
+        avisos_ppu = df28.loc[df28['Grupo planif.']== 'ARP']
+        avisos_general = df28.copy()
+        avisos_sin_relevamiento = avisos_general.loc[~avisos_general['Aviso'].isin(avisos_relevados)]
+        avisos_sin_relevamiento = avisos_sin_relevamiento.loc[~avisos_general['Status usuario'].isin(self.herramientas.sacar_status)]
+        
+        return [avisos_general,avisos_sin_relevamiento,avisos_ppu]
