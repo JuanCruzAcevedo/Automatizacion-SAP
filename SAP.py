@@ -67,7 +67,7 @@ class Sap():
     def descargar_datos_ciudadanos(self,ruta_copiar,ruta_guardar,nombre):
         '''En el parametro 'ruta_copiar' se pone la ruta de donde sacar los avisos, en "ruta_guardar" se coloca el solamente la ruta donde se guardara,
         y  por ultimo en "nombre" se seleciona el nombre que tendra el archivo '''
-        self.session.StartTransaction(Transaction="ZDATOS_CIUDADANOS")
+        self.transaction("ZDATOS_CIUDADANOS")
         self.copiar_avisos(ruta_copiar,'Aviso')
         self.session.findById("wnd[0]/usr/btn%_SO_QMNUM_%_APP_%-VALU_PUSH").press()
         self.session.findById("wnd[1]/tbar[0]/btn[24]").press()
@@ -89,4 +89,38 @@ class Sap():
         df1.to_excel("{}{}.xlsx".format(ruta_guardar,nombre), index = False)
         os.remove("{}{}.txt".format(ruta_guardar,nombre))
 
+    def descarga_descripcion(self,avisos_buscar,ruta_guarda,nombre):
+        """Copia los avisos del archivo que se le indique en 'avisos buscar', luego se le indica 
+        la ruta a guardar de los archivos en 'ruta guarda' (solo la ruta) y finalemente se ingresa el nombre para el archivo"""
+        self.transaccion("ZR010_TAVISOS")
+        self.copiar_avisos(avisos_buscar,'Aviso')
+        self.session.findById("wnd[0]/usr/radRB_MAN").select()
+        self.session.findById("wnd[0]/usr/btn%_P_AVISOS_%_APP_%-VALU_PUSH").press()
+        self.session.findById("wnd[1]/tbar[0]/btn[24]").press()
+        self.session.findById("wnd[1]").sendVKey(8)
+        self.session.findById("wnd[0]").sendVKey(8)
+        self.session.findById("wnd[0]/tbar[1]/btn[46]").press()
+        self.session.findById("wnd[0]/tbar[0]/okcd").text = "%pc"
+        self.session.findById("wnd[0]").sendVKey(0)
+        self.session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").select()
+        self.session.findById("wnd[1]/usr/subSUBSCREEN_STEPLOOP:SAPLSPO5:0150/sub:SAPLSPO5:0150/radSPOPLI-SELFLAG[1,0]").setFocus()
+        self.session.findById("wnd[1]/tbar[0]/btn[0]").press()
+        self.session.findById("wnd[1]/usr/ctxtDY_PATH").text = "{}".format(ruta_guarda)
+        self.session.findById("wnd[1]/usr/ctxtDY_FILENAME").text = "{}.txt".format(nombre)
+        self.session.findById("wnd[1]/tbar[0]/btn[11]").press()
+        #----normaliza el txt-------#
+        df1=pd.read_table("{}{}.txt".format(ruta_guarda,nombre),sep="\t",encoding="latin-1", error_bad_lines=False) 
+
+        df1=df1[["Objeto","Texto Extendido"]]
+
+        df1=df1.groupby('Objeto').agg(lambda x: x.tolist())
+
+        df1['Texto Extendido']=df1['Texto Extendido'].astype(str)
+        textos=["\['\* ","\)', '\*","', '\*","'\]","', '  ",","]
+
+        for texto in textos:
+            df1['Texto Extendido']=df1['Texto Extendido'].str.replace("{}".format(texto),' ')
+
+        df1.to_excel("{}{}.xlsx".format(ruta_guarda,nombre))
+        os.remove("{}{}.txt".format(ruta_guarda,nombre))
     
