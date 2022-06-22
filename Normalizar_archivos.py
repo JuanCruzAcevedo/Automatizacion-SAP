@@ -194,6 +194,10 @@ class Normalizar_archivos():
         df28['Barrio'] = df28['Emplazamiento'].map(self.herramientas.barrios).fillna('Ver')
         df28['Status simplificado'] = df28['Status usuario'].map(self.herramientas.status_simplificado)
         df28['Prestacion Simplificada']= df28['Prestacion'].map(self.herramientas.prestaciones_avisos)
+        df28['Fecha de aviso'] = df28['Fecha de aviso'].dt.strftime('%d/%m/%Y')
+        df28['Modificado el'] = df28['Modificado el'].dt.strftime('%d/%m/%Y')
+        df28.fillna("",inplace = True )
+
 
         #crea un df de los n° de avisos relevados 
         df_relevamientos = Archivos_drive(self.credenciales,"R11","Respuestas de formulario 1")#self.credenciales

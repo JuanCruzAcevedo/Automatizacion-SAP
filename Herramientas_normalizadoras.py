@@ -91,8 +91,8 @@ class Herramientas_normalizadoras():
             'REOK': 'Resuelto'   
         }
         self.barrios = {
-            '39':'Villa general Mitre','38':'Villa Devoto',
-            '46':'Villa Santa Rita','37':'Villa del Parque'
+            39:'Villa general Mitre',38:'Villa Devoto',
+            46:'Villa Santa Rita',37:'Villa del Parque'
         }
         
 
