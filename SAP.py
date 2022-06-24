@@ -200,7 +200,6 @@ class Sap():
 
                     #baja el cursor
                     self.session.findById("wnd[0]/usr/subSUB0:SAPLMEGUI:0020/subSUB3:SAPLMEVIEWS:1100/subSUB2:SAPLMEVIEWS:1200/subSUB1:SAPLMEGUI:1301/subSUB2:SAPLMEGUI:1303/tabsITEM_DETAIL/tabpTABIDT1/ssubTABSTRIPCONTROL1SUB:SAPLMEGUI:1328/subSUB0:SAPLMLSP:0400/tblSAPLMLSPTC_VIEW").verticalScrollbar.position = 10
-                    sleep(5)
 
                 else:
                     carga = df.loc[(df.index>inicio[numero])&(df.index<=fin[numero])]
@@ -226,10 +225,10 @@ class Sap():
             elif guardar == True:
                 self.session.findById("wnd[0]").sendVKey(11)
                 self.session.findById("wnd[1]/usr/btnSPOP-VAROPTION1").press()
-                numero_pedido = sessione.findById("wnd[0]/sbar").text.split()[-1]
+                numero_pedido = self.session.findById("wnd[0]/sbar").text.split()[-1]
                 print('el numero de pedido marco es :\n{}'.format(numero_pedido))
                 
-    def liquidacion(self):        
+    def liquidacion(self,ruta):        
         #primera parte vincula los avisos
         self.transaccion('ZC011_VINC')
         self.session.findById("wnd[0]/usr/ctxtPA_PATH").text = ruta
