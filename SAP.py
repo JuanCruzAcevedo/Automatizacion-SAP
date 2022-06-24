@@ -1,11 +1,17 @@
 import os
 import win32com.client as win32
 import pandas as pd
+from Herramientas_normalizadoras import Herramientas_normalizadoras
 
 class Sap():
-    def __init__(self):
+    def __init__(self,credenciales = ""):
         SapGui = win32.GetObject("SAPGUI").GetScriptingEngine
         self.session = SapGui.FindById("ses[0]")
+        if credenciales == "":
+            self.credenciales = credenciales
+        else:
+            self.credenciales = credenciales
+            self.herramientas = Herramientas_normalizadoras(self.credenciales)
     
     def guardar(self,ruta):
         """Guarda los archivos, se le indica el nombre del archivo y la ruta a guardar""" 
