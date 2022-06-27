@@ -2,6 +2,7 @@ import os
 import win32com.client as win32
 import pandas as pd
 from Herramientas_normalizadoras import Herramientas_normalizadoras
+import numpy as np
 
 class Sap():
     def __init__(self,credenciales = ""):
@@ -126,6 +127,11 @@ class Sap():
 
         for texto in textos:
             df1['Texto Extendido']=df1['Texto Extendido'].str.replace("{}".format(texto),' ')
+
+        df1['Texto Extendido'] = np.where(df1['Texto Extendido']=='[nan]',
+                            'sin texto',
+                            df1['Texto Extendido'].str.split('            ').str[1]
+                            )
 
         df1.to_excel("{}{}.xlsx".format(ruta_guarda,nombre))
         os.remove("{}{}.txt".format(ruta_guarda,nombre))
