@@ -188,3 +188,16 @@ class Herramientas_normalizadoras():
             return dic_exacto
         elif ubt_ex == False:
             return dic_corredor
+    
+    def cargar_fechas(self):
+        '''Devuelve un diccionario con las fechas, del año y define a que semana corresponde,
+        y al mes, puede ser mes del dia o de la semana '''
+        fechas= Archivos_drive(self.credenciales,'Diccionarios','calendario')
+        fechas_df= fechas.abrir_archivo()
+        fechas_dicc = {}
+        for numero,dia in enumerate(fechas_df['Fecha']):
+            fechas_dicc[dia] = {'semana':fechas_df['Semana'][numero],
+                                  'mes':fechas_df['Mes'][numero],
+                                  'mes por semana':fechas_df['Mes por semana'][numero]}
+
+        return fechas_dicc
