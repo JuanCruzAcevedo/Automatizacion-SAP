@@ -182,7 +182,7 @@ class Normalizar_archivos():
 
     def normalizar_avisos(self,veintiocho,sesenta_y_seis):
         '''Normaliza los avisos y devuelve varios DF'''
-        
+        dic_fechas = self.herramientas.cargar_fechas(True)       
         #lee los archivos de los avisos y los junta (66 y 28)
         df28= pd.read_excel(r'{}'.format(veintiocho))
         df66= pd.read_excel(r'{}'.format(sesenta_y_seis))
@@ -196,6 +196,13 @@ class Normalizar_archivos():
         df28['Prestacion Simplificada']= df28['Prestacion'].map(self.herramientas.prestaciones_avisos)
         df28['Fecha de aviso'] = df28['Fecha de aviso'].dt.strftime('%d/%m/%Y')
         df28['Modificado el'] = df28['Modificado el'].dt.strftime('%d/%m/%Y')
+        
+        #--------------------
+        df28['semana'] =  df28['Fecha de aviso'].map(dic_fechas).str.get('semana')
+        df28['mes'] =  df28['Fecha de aviso'].map(dic_fechas).str.get('mes')
+        df28['mes por semana'] =  df28['Fecha de aviso'].map(dic_fechas).str.get('mes por semana')
+        #--------------------
+
         df28.fillna("",inplace = True )
 
 
@@ -211,3 +218,65 @@ class Normalizar_archivos():
         avisos_sin_relevamiento = avisos_sin_relevamiento.loc[~avisos_general['Status usuario'].isin(self.herramientas.sacar_status)]
         
         return [avisos_general,avisos_sin_relevamiento,avisos_ppu]
+
+    def normalizar_inspectores(self,dos_mil_veintiuno = False):
+        #usamos la herramienta Normalizadora que esta como atributo en la clase
+        dic_fechas  =self.herramientas.cargar_fechas()
+        #descargamos el archivo R11 y los Avisos hasta la fecha estos ultimos los pasamos a una lista 
+        insp = Archivos_drive(self.credenciales,
+                            'R11',
+                            'Respuestas de formulario 1'
+                           )
+        df_insp = insp.abrir_archivo()
+
+        avisos = Archivos_drive(self.credenciales,
+                            'Avisos',
+                            '2022')
+        df_avisos = avisos.abrir_archivo()
+        
+        avisos_cruce = df_avisos['Aviso'].astype(str).to_list()
+
+        #Dejamos la fecha (como texto) y utilizamos solo la primer parte, dividimos el df en 2022 y 2021
+        df_insp['Marca temporal'] = df_insp['Marca temporal'].str.split(' ').str[0]
+        df_2021 = df_insp.loc[df_insp['Marca temporal'].str.find('2021') != -1].copy()
+        df_2022 = df_insp.loc[df_insp['Marca temporal'].str.find('2021') == -1].copy()
+
+        #Trabaja sobre el Df2022 asignandole nuevas columnas relativas a fechas
+
+        df_2022['semana'] =  df_2022['Marca temporal'].map(dic_fechas).str.get('semana')
+        df_2022['mes'] =  df_2022['Marca temporal'].map(dic_fechas).str.get('mes')
+        df_2022['mes por semana'] =  df_2022['Marca temporal'].map(dic_fechas).str.get('mes por semana')
+
+        #todos estos son relevamientos con ingreso previo a la implementacion de la columna de avisos
+        df_2022['Clasificacion de Avisos'] = ''
+        df_2022.loc[df_2022['Numero de aviso'] == '','Clasificacion de Avisos'] = 'Relevamientos previos'
+
+        #Estos son los avisos encontrados que ingresaron en 2022
+
+        df_2022.loc[df_2022['Numero de aviso'].isin(avisos_cruce),'Clasificacion de Avisos'] = 'Aviso 2022'
+
+        #saca los espacios y define todos los campos de Aviso que son solamente letras Luego con eso completa la clasificacion
+        df_2022['Numero de aviso'] = df_2022['Numero de aviso'].str.replace(' ','').str.upper()
+        clasificacion = df_2022.loc[df_2022['Numero de aviso'].str.isalpha(),'Numero de aviso'].unique().tolist()
+        for campo in clasificacion : 
+            df_2022.loc[df_2022['Numero de aviso']==campo,'Clasificacion de Avisos'] = campo
+        #aplica la funcion de 'avisos_definir', esta actua sobre los avisos que no encontro en instancias anteriore y los define en base a sus ultimos 3 caracteres
+        df_2022.loc[df_2022['Clasificacion de Avisos']=='','Clasificacion de Avisos'] = df_2022['Numero de aviso'].apply(self.herramientas.avisos_definir)
+        #Limpia el DF y deja solo las columnas que nos interesan
+        df_2022 = df_2022[['Marca temporal', 'Nombre completo', 'Numero de aviso', 'Calle',
+         'Chapa', 'Referencia','Especie', 'DAP (cm)',
+         'Altura (m)', 'Tarea Recomendada','Tipo de poda',
+         'Tipo de corte de raíz',
+         'Condición del árbol', 'Defectos del ejemplar',
+         'Consecuencias','Riesgo', 'Prioridad',
+         'id', 'Status Avisos ', 'Orden','semana', 'mes', 'mes por semana',
+         'Clasificacion de Avisos']]
+        df_2022.reset_index(inplace = True)
+        df_2021.reset_index(inplace = True)
+        
+        if dos_mil_veintiuno ==True:
+            return [df_2021,df_2022]
+        
+        elif dos_mil_veintiuno ==False:
+            return df_2022
+

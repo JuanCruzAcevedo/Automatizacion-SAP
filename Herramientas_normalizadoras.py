@@ -189,11 +189,15 @@ class Herramientas_normalizadoras():
         elif ubt_ex == False:
             return dic_corredor
     
-    def cargar_fechas(self):
+    def cargar_fechas(self,tipo_fecha = False):
         '''Devuelve un diccionario con las fechas, del año y define a que semana corresponde,
         y al mes, puede ser mes del dia o de la semana '''
-        fechas= Archivos_drive(self.credenciales,'Diccionarios','calendario')
-        fechas_df= fechas.abrir_archivo()
+        if tipo_fecha == False:
+            fechas= Archivos_drive(self.credenciales,'Diccionarios','calendario')
+            fechas_df= fechas.abrir_archivo()
+        elif tipo_fecha == True:
+            fechas= Archivos_drive(self.credenciales,'Diccionarios','calendario correcto')
+            fechas_df= fechas.abrir_archivo()
         fechas_dicc = {}
         for numero,dia in enumerate(fechas_df['Fecha']):
             fechas_dicc[dia] = {'semana':fechas_df['Semana'][numero],
@@ -201,3 +205,17 @@ class Herramientas_normalizadoras():
                                   'mes por semana':fechas_df['Mes por semana'][numero]}
 
         return fechas_dicc
+    
+    def avisos_definir(self,cadena):
+        if cadena.find('/22') != -1:
+            return'Aviso 2022'
+        elif cadena.find('/21') != -1:
+            return 'Aviso 2021'
+        elif cadena.find('/20') != -1:
+            return'Aviso 2020'
+        elif cadena.find('/19') != -1:
+            return'Aviso 2019'
+        elif cadena.find('/18') != -1:
+            return'Aviso 2018'
+        else:
+            return'Aviso previo 2018'
