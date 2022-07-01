@@ -267,12 +267,12 @@ class Normalizar_archivos():
          'Chapa', 'Referencia','Especie', 'DAP (cm)',
          'Altura (m)', 'Tarea Recomendada','Tipo de poda',
          'Tipo de corte de raíz',
-         'Condición del árbol', 'Defectos del ejemplar',
-         'Consecuencias','Riesgo', 'Prioridad',
+         'Condición del árbol','Consecuencias',
+         'Riesgo', 'Prioridad',
          'id', 'Status Avisos ', 'Orden','semana', 'mes', 'mes por semana',
          'Clasificacion de Avisos']]
-        df_2022.reset_index(inplace = True)
-        df_2021.reset_index(inplace = True)
+        df_2022.reset_index(inplace = True, drop = True)
+        df_2021.reset_index(inplace = True, drop = True)
         
         if dos_mil_veintiuno ==True:
             return [df_2021,df_2022]
