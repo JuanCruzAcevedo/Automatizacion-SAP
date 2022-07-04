@@ -136,7 +136,7 @@ class Normalizar_archivos():
                'Cuadra (Automatico) ', 'orden1', 'Ubicación Tecnica', 'inicio extremo',
                'fin extremo', 'clase de actividad', 'puesto de trabajo', 'grupo plani',
                'texto breve', 'Clave de campo', 'Clave Modelo', 'Duracion', 'Chapa',
-               'Ref', 'Especie', 'DAP', 'Altura', 'Emplazamiento','Prestacion','Largo']]
+               'Ref', 'Especie', 'DAP', 'Altura', 'Emplazamiento','Prestacion','Largo','Numero de aviso']]
         
 
         #creamos las clave modelo de retiro para las podas
